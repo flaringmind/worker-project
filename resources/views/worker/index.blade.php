@@ -8,8 +8,26 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Worker app</h1>
+    <hr>
     <div>
         <a href="{{ route('worker.create') }}">Добавить</a>
+    </div>
+    <hr>
+    <div>
+        <form action="{{ route('worker.index') }}">
+            <input type="text" name="first_name" placeholder="first_name" value="{{ request()->get('first_name') }}">
+            <input type="text" name="last_name" placeholder="last_name" value="{{ request()->get('last_name') }}">
+            <input type="text" name="email" placeholder="email" value="{{ request()->get('email') }}">
+            <input type="number" name="from" placeholder="from" value="{{ request()->get('from') }}">
+            <input type="number" name="to" placeholder="to" value="{{ request()->get('to') }}">
+            <input type="text" name="description" placeholder="description" value="{{ request()->get('description') }}">
+            <input id="isMarried" type="checkbox" name="is_married"
+                {{request()->get('is_married') == 'on' ? ' checked' : '' }}>
+            <label for="isMarried">Is Married</label>
+            <input type="submit">
+            <a href="{{ route('worker.index') }}">Сбросить фильтры</a>
+        </form>
     </div>
     <hr>
     <div>
@@ -37,7 +55,7 @@
                 <hr>
             @endforeach
             <div class="nav">
-                {{ $workers->links() }}
+                {{ $workers->withQueryString()->links() }}
             </div>
         </ol>
     </div>
