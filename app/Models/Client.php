@@ -5,28 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Worker extends Model
+class Client extends Model
 {
     use HasFactory;
 
-    protected $table = 'workers';
-
     protected $guarded = false;
-
-    public function profile()
-    {
-        return $this->hasOne(Profile::class);
-    }
-
-    public function position()
-    {
-        return $this->belongsTo(Position::class);
-    }
-
-    public function projects()
-    {
-        return $this->belongsToMany(Project::class);
-    }
 
     public function avatar()
     {
@@ -35,7 +18,7 @@ class Worker extends Model
 
     public function reviews()
     {
-        return $this->morphMany(Review::class, 'reviewable');
+        return $this->morphMany(Review::class, 'reviewaaable');
     }
 
     public function tags()

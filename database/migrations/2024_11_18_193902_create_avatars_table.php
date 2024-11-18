@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('positions', function (Blueprint $table) {
+        Schema::create('avatars', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->foreignId('department_id')->index()->constrained('departments');
+            $table->string('path');
             $table->timestamps();
+
+            $table->unsignedBigInteger('avatarable_id');
+            $table->string('avatarable_type');
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('positions');
+        Schema::dropIfExists('avatars');
     }
 };

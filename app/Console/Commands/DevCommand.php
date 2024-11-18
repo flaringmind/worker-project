@@ -2,10 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Avatar;
+use App\Models\Client;
+use App\Models\Department;
 use App\Models\Position;
 use App\Models\Profile;
 use App\Models\Project;
-use App\Models\ProjectWorker;
+use App\Models\Review;
+use App\Models\Tag;
 use App\Models\Worker;
 use Illuminate\Console\Command;
 
@@ -35,34 +39,55 @@ class DevCommand extends Command
 //        $this->prepareData();
 //        $this->prepareManyToMany();
 
-//        $project = Project::find(1);
-//        $workers = $project->workers->toArray();
+//        $avatar = Avatar::find(1);
+//        dd($avatar->avatarable->toArray());
 
-//        $worker = Worker::find(4);
-//        $projects = $worker->projects->toArray();
+        $worker = Worker::find(1);
+        $client = Client::find(1);
+        $tag = Tag::find(1);
 
-        $project = Project::find(1);
-        $worker5 = Worker::find(5);
-        $worker2 = Worker::find(2);
-        $worker3 = Worker::find(3);
-        $worker4 = Worker::find(4);
+//        $worker->tags()->attach([1, 3]);
+//        $client->tags()->attach([1, 2, 3]);
+        dd($worker->tags->toArray());
 
-        $project->workers()->toggle([$worker5->id, $worker2->id]);
-
-        dd($worker5->toArray());
         return 0;
     }
 
     private function prepareData()
     {
+         Client::create([
+            'name' => 'sdsfdgrthjhjk'
+        ]);
+
+         Client::create([
+            'name' => 'sdccxzvxcv'
+        ]);
+
+         Client::create([
+            'name' => 'fdsfsfds'
+        ]);
+
+        $department1 = Department::create([
+            'title' => 'Development'
+        ]);
+
+        $department2 = Department::create([
+            'title' => 'Analytics'
+        ]);
+
         $position1 = Position::create([
-            'title' => 'Developer'
+            'title' => 'Developer',
+            'department_id' => $department1->id
         ]);
+
         $position2 = Position::create([
-            'title' => 'Manager'
+            'title' => 'Manager',
+            'department_id' => $department1->id
         ]);
+
         $position3 = Position::create([
-            'title' => 'Kaban Kabanych'
+            'title' => 'Kaban Kabanych',
+            'department_id' => $department1->id
         ]);
 
         $workerData1 = [
@@ -133,7 +158,6 @@ class DevCommand extends Command
         $worker6 = Worker::create($workerData6);
 
         $profileData1 = [
-            'worker_id' => $worker1->id,
             'city' => 'Chelyabinsk',
             'skill' => 'Blowjobs',
             'experience' => 3,
@@ -141,7 +165,6 @@ class DevCommand extends Command
         ];
 
         $profileData2 = [
-            'worker_id' => $worker2->id,
             'city' => 'Chelyabinsk',
             'skill' => 'Terror',
             'experience' => 24,
@@ -149,7 +172,6 @@ class DevCommand extends Command
         ];
 
         $profileData3 = [
-            'worker_id' => $worker3->id,
             'city' => 'Ust-podzalupinsk',
             'skill' => 'Obedience',
             'experience' => 4,
@@ -157,14 +179,12 @@ class DevCommand extends Command
         ];
 
         $profileData4 = [
-            'worker_id' => $worker4->id,
             'city' => 'Ust-muhosransk',
             'skill' => 'Violence',
             'experience' => 4,
         ];
 
         $profileData5 = [
-            'worker_id' => $worker5->id,
             'city' => 'Moscow',
             'skill' => 'JS-makaka',
             'experience' => 3,
@@ -172,19 +192,18 @@ class DevCommand extends Command
         ];
 
         $profileData6 = [
-            'worker_id' => $worker6->id,
             'city' => 'St-Petersburg',
             'skill' => 'PHP-Slonyara',
             'experience' => 8,
             'finished_study_at' => '2017-06-23',
         ];
 
-        $profile1 = Profile::create($profileData1);
-        $profile2 = Profile::create($profileData2);
-        $profile3 = Profile::create($profileData3);
-        $profile4 = Profile::create($profileData4);
-        $profile5 = Profile::create($profileData5);
-        $profile6 = Profile::create($profileData6);
+        $worker1->profile()->create($profileData1);
+        $worker2->profile()->create($profileData2);
+        $worker3->profile()->create($profileData3);
+        $worker4->profile()->create($profileData4);
+        $worker5->profile()->create($profileData5);
+        $worker6->profile()->create($profileData6);
     }
 
     private function prepareManyToMany()
@@ -205,46 +224,19 @@ class DevCommand extends Command
             'title' => 'ERP'
         ]);
 
-        ProjectWorker::create([
-            'project_id' => $project1->id,
-            'worker_id' => $worker1->id
+        $project1->workers()->attach([
+            $worker1->id,
+            $worker3->id,
+            $manager->id,
+            $kaban->id
         ]);
 
-        ProjectWorker::create([
-            'project_id' => $project1->id,
-            'worker_id' => $worker3->id
+        $project2->workers()->attach([
+            $worker5->id,
+            $worker6->id,
+            $manager->id,
+            $kaban->id
         ]);
 
-        ProjectWorker::create([
-            'project_id' => $project1->id,
-            'worker_id' => $manager->id
-        ]);
-
-        ProjectWorker::create([
-            'project_id' => $project1->id,
-            'worker_id' => $kaban->id
-        ]);
-
-
-
-        ProjectWorker::create([
-            'project_id' => $project2->id,
-            'worker_id' => $worker5->id
-        ]);
-
-        ProjectWorker::create([
-            'project_id' => $project2->id,
-            'worker_id' => $worker6->id
-        ]);
-
-        ProjectWorker::create([
-            'project_id' => $project2->id,
-            'worker_id' => $manager->id
-        ]);
-
-        ProjectWorker::create([
-            'project_id' => $project2->id,
-            'worker_id' => $kaban->id
-        ]);
     }
 }
