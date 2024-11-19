@@ -11,7 +11,7 @@
             <div>Description: {{ $worker->description }}</div>
             <div>Is Married: {{ $worker->is_married }}</div>
             <div>
-                <a href="{{ route('worker.index') }}">Назад</a>
+                <a href="{{ route('workers.index') }}">Назад</a>
             </div>
         </li>
     </ol>

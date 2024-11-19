@@ -38,18 +38,18 @@ class WorkerController extends Controller
 
         $workers = $workerQuery->paginate(4);
 
-        return view('worker.index', compact('workers'));
+        return view('workers.index', compact('workers'));
     }
 
     public function show(Worker $worker)
     {
-        return view('worker.show', compact('worker'));
+        return view('workers.show', compact('worker'));
 
     }
 
     public function create()
     {
-        return view('worker.create');
+        return view('workers.create');
     }
 
     public function store(StoreRequest $request)
@@ -58,12 +58,12 @@ class WorkerController extends Controller
         $data['is_married'] = isset($data['is_married']);
         Worker::create($data);
 
-        return redirect()->route('worker.index');
+        return redirect()->route('workers.index');
     }
 
     public function edit(Worker $worker)
     {
-        return view('worker.edit', compact('worker'));
+        return view('workers.edit', compact('worker'));
     }
 
     public function update(Worker $worker, UpdateRequest $request) {
@@ -72,11 +72,11 @@ class WorkerController extends Controller
 
         $worker->update($data);
 
-        return redirect()->route('worker.show', $worker->id);
+        return redirect()->route('workers.show', $worker->id);
     }
 
-    public function delete(Worker $worker) {
+    public function destroy(Worker $worker) {
         $worker->delete();
-        return redirect()->route('worker.index');
+        return redirect()->route('workers.index');
     }
 }
