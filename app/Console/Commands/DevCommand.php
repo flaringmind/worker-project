@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SomeJob;
 use App\Models\Avatar;
 use App\Models\Client;
 use App\Models\Department;
@@ -36,9 +37,8 @@ class DevCommand extends Command
      */
     public function handle()
     {
+        SomeJob::dispatch()->onQueue('some_queue');
 
-        $workers = Worker::get();
-        dd($workers->count());
         return 0;
     }
 }
