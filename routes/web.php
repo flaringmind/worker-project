@@ -1,23 +1,31 @@
 <?php
 
-use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/workers', [WorkerController::class, 'index'])->name('worker.index');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/workers/create', [WorkerController::class, 'create'])->name('worker.create');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::post('/workers', [WorkerController::class, 'store'])->name('worker.store');
-
-Route::get('/workers/{worker}', [WorkerController::class, 'show'])->name('worker.show');
-
-Route::get('/workers/{worker}/edit', [WorkerController::class, 'edit'])->name('worker.edit');
-
-Route::patch('/workers/{worker}', [WorkerController::class, 'update'])->name('worker.update');
-
-Route::delete('/workers/{worker}', [WorkerController::class, 'delete'])->name('worker.delete');
-
+require __DIR__.'/auth.php';
