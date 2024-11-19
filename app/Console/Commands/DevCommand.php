@@ -36,10 +36,9 @@ class DevCommand extends Command
      */
     public function handle()
     {
-        $worker = Worker::find(1);
-        $worker->update([
-            'age' => '25.000'
-        ]);
+
+        $workers = Worker::get();
+        dd($workers->count());
         return 0;
     }
 }
