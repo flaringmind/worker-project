@@ -39,16 +39,8 @@ class DevCommand extends Command
 //        $this->prepareData();
 //        $this->prepareManyToMany();
 
-//        $avatar = Avatar::find(1);
-//        dd($avatar->avatarable->toArray());
-
-        $worker = Worker::find(1);
-        $client = Client::find(1);
-        $tag = Tag::find(1);
-
-//        $worker->tags()->attach([1, 3]);
-//        $client->tags()->attach([1, 2, 3]);
-        dd($worker->tags->toArray());
+        $position = Position::first();
+        dd($position->queryWorker->toArray());
 
         return 0;
     }
