@@ -1,10 +1,12 @@
 @extends('layout.main')
 
 @section('content')
+
+@can('create', \App\Models\Worker::class)
 <div>
     <a href="{{ route('workers.create') }}">Добавить</a>
 </div>
-<hr>
+@endcan
 <div>
     <form action="{{ route('workers.index') }}">
         <input type="text" name="first_name" placeholder="first_name" value="{{ request()->get('first_name') }}">
@@ -34,13 +36,18 @@
                 <div>
                     <a href="{{ route('workers.show', $worker->id) }}">Подробнее</a>
                     <br />
+                    @can('update', $worker)
                     <a href="{{ route('workers.edit', $worker->id) }}">Редактировать</a>
                     <br />
+                    @endcan
+
+                    @can('delete', $worker)
                     <form action="{{ route('workers.destroy', $worker->id) }}" method="post">
                         @csrf
                         @method('delete')
                         <input type="submit" value="Удалить">
                     </form>
+                    @endcan
                 </div>
             </li>
             <hr>
