@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\Worker\CreatedEvent;
+use App\Models\Traits\HasFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Worker extends Model
 {
     use HasFactory;
-
     use SoftDeletes;
+    use HasFilter;
 
     protected $table = 'workers';
 
     protected $guarded = false;
+
 
     protected static function booted()
     {

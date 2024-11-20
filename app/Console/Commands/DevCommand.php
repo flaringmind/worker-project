@@ -2,17 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\SomeJob;
-use App\Models\Avatar;
-use App\Models\Client;
-use App\Models\Department;
-use App\Models\Position;
-use App\Models\Profile;
-use App\Models\Project;
-use App\Models\Review;
-use App\Models\Tag;
+use App\Http\Filters\Var2\Worker\AgeFrom;
+use App\Http\Filters\Var2\Worker\AgeTo;
+use App\Http\Filters\Var2\Worker\Name;
 use App\Models\Worker;
 use Illuminate\Console\Command;
+use Illuminate\Pipeline\Pipeline;
 
 class DevCommand extends Command
 {
@@ -37,8 +32,17 @@ class DevCommand extends Command
      */
     public function handle()
     {
-        SomeJob::dispatch()->onQueue('some_queue');
+        request()->merge(['from' => 32, 'first_name' => 'Johndsds']);
+        $workers = app()->make(Pipeline::class)
+            ->send(Worker::query())
+            ->through([
+                AgeFrom::class,
+                AgeTo::class,
+                Name::class,
+            ])
+            ->thenReturn();
 
+        dd($workers->get()->toArray());
         return 0;
     }
 }

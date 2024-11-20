@@ -2,41 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\Var1\WorkerFilter;
+use App\Http\Filters\Var2\Worker\AgeFrom;
+use App\Http\Filters\Var2\Worker\AgeTo;
+use App\Http\Filters\Var2\Worker\Name;
 use App\Http\Requests\Worker\IndexRequest;
 use App\Http\Requests\Worker\StoreRequest;
 use App\Http\Requests\Worker\UpdateRequest;
 use App\Models\Worker;
+use Illuminate\Pipeline\Pipeline;
 
 class WorkerController extends Controller
 {
     public function index(IndexRequest $request)
     {
-        $data = $request->validated();
+        $workers = app()->make(Pipeline::class)
+            ->send(Worker::query())
+            ->through([
+                AgeFrom::class,
+                AgeTo::class,
+                Name::class,
+            ])
+            ->thenReturn();
 
-        $workerQuery = Worker::query();
-
-        $fieldsWithLike = ['first_name', 'last_name', 'email', 'description'];
-
-        foreach ($fieldsWithLike as $field) {
-            if (isset($data[$field])) {
-                $workerQuery->where($field, 'like', "%{$data[$field]}%");
-            }
-        }
-
-        if(isset($data['from'])) {
-            $workerQuery->where('age', '>', $data['from']);
-        }
-
-        if(isset($data['to'])) {
-            $workerQuery->where('age', '<', $data['to']);
-        }
-
-        if(isset($data['is_married'])) {
-            $workerQuery->where('is_married', true);
-        }
-
-
-        $workers = $workerQuery->paginate(4);
+        $workers = $workers->paginate(4);
 
         return view('workers.index', compact('workers'));
     }
